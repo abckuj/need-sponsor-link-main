@@ -18,7 +18,10 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CasesIdRouteImport } from './routes/cases.$id'
 import { Route as AuthenticatedSubmitCaseRouteImport } from './routes/_authenticated/submit-case'
+import { Route as AuthenticatedSponsorDashboardRouteImport } from './routes/_authenticated/sponsor-dashboard'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedBeneficiaryDashboardRouteImport } from './routes/_authenticated/beneficiary-dashboard'
+import { Route as AuthenticatedAdminDashboardRouteImport } from './routes/_authenticated/admin-dashboard'
 
 const StoriesRoute = StoriesRouteImport.update({
   id: '/stories',
@@ -64,11 +67,29 @@ const AuthenticatedSubmitCaseRoute = AuthenticatedSubmitCaseRouteImport.update({
   path: '/submit-case',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedSponsorDashboardRoute =
+  AuthenticatedSponsorDashboardRouteImport.update({
+    id: '/sponsor-dashboard',
+    path: '/sponsor-dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedBeneficiaryDashboardRoute =
+  AuthenticatedBeneficiaryDashboardRouteImport.update({
+    id: '/beneficiary-dashboard',
+    path: '/beneficiary-dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedAdminDashboardRoute =
+  AuthenticatedAdminDashboardRouteImport.update({
+    id: '/admin-dashboard',
+    path: '/admin-dashboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -77,7 +98,10 @@ export interface FileRoutesByFullPath {
   '/browse': typeof BrowseRoute
   '/impact': typeof ImpactRoute
   '/stories': typeof StoriesRoute
+  '/admin-dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/beneficiary-dashboard': typeof AuthenticatedBeneficiaryDashboardRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/sponsor-dashboard': typeof AuthenticatedSponsorDashboardRoute
   '/submit-case': typeof AuthenticatedSubmitCaseRoute
   '/cases/$id': typeof CasesIdRoute
 }
@@ -88,7 +112,10 @@ export interface FileRoutesByTo {
   '/browse': typeof BrowseRoute
   '/impact': typeof ImpactRoute
   '/stories': typeof StoriesRoute
+  '/admin-dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/beneficiary-dashboard': typeof AuthenticatedBeneficiaryDashboardRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/sponsor-dashboard': typeof AuthenticatedSponsorDashboardRoute
   '/submit-case': typeof AuthenticatedSubmitCaseRoute
   '/cases/$id': typeof CasesIdRoute
 }
@@ -101,7 +128,10 @@ export interface FileRoutesById {
   '/browse': typeof BrowseRoute
   '/impact': typeof ImpactRoute
   '/stories': typeof StoriesRoute
+  '/_authenticated/admin-dashboard': typeof AuthenticatedAdminDashboardRoute
+  '/_authenticated/beneficiary-dashboard': typeof AuthenticatedBeneficiaryDashboardRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/sponsor-dashboard': typeof AuthenticatedSponsorDashboardRoute
   '/_authenticated/submit-case': typeof AuthenticatedSubmitCaseRoute
   '/cases/$id': typeof CasesIdRoute
 }
@@ -114,7 +144,10 @@ export interface FileRouteTypes {
     | '/browse'
     | '/impact'
     | '/stories'
+    | '/admin-dashboard'
+    | '/beneficiary-dashboard'
     | '/dashboard'
+    | '/sponsor-dashboard'
     | '/submit-case'
     | '/cases/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -125,7 +158,10 @@ export interface FileRouteTypes {
     | '/browse'
     | '/impact'
     | '/stories'
+    | '/admin-dashboard'
+    | '/beneficiary-dashboard'
     | '/dashboard'
+    | '/sponsor-dashboard'
     | '/submit-case'
     | '/cases/$id'
   id:
@@ -137,7 +173,10 @@ export interface FileRouteTypes {
     | '/browse'
     | '/impact'
     | '/stories'
+    | '/_authenticated/admin-dashboard'
+    | '/_authenticated/beneficiary-dashboard'
     | '/_authenticated/dashboard'
+    | '/_authenticated/sponsor-dashboard'
     | '/_authenticated/submit-case'
     | '/cases/$id'
   fileRoutesById: FileRoutesById
@@ -218,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSubmitCaseRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/sponsor-dashboard': {
+      id: '/_authenticated/sponsor-dashboard'
+      path: '/sponsor-dashboard'
+      fullPath: '/sponsor-dashboard'
+      preLoaderRoute: typeof AuthenticatedSponsorDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -225,16 +271,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/beneficiary-dashboard': {
+      id: '/_authenticated/beneficiary-dashboard'
+      path: '/beneficiary-dashboard'
+      fullPath: '/beneficiary-dashboard'
+      preLoaderRoute: typeof AuthenticatedBeneficiaryDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/admin-dashboard': {
+      id: '/_authenticated/admin-dashboard'
+      path: '/admin-dashboard'
+      fullPath: '/admin-dashboard'
+      preLoaderRoute: typeof AuthenticatedAdminDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminDashboardRoute: typeof AuthenticatedAdminDashboardRoute
+  AuthenticatedBeneficiaryDashboardRoute: typeof AuthenticatedBeneficiaryDashboardRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedSponsorDashboardRoute: typeof AuthenticatedSponsorDashboardRoute
   AuthenticatedSubmitCaseRoute: typeof AuthenticatedSubmitCaseRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminDashboardRoute: AuthenticatedAdminDashboardRoute,
+  AuthenticatedBeneficiaryDashboardRoute:
+    AuthenticatedBeneficiaryDashboardRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedSponsorDashboardRoute: AuthenticatedSponsorDashboardRoute,
   AuthenticatedSubmitCaseRoute: AuthenticatedSubmitCaseRoute,
 }
 

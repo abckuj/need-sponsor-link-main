@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({ meta: [{ title: "Sign in — HopeBridge" }, { name: "description", content: "Sign in or create your HopeBridge account." }] }),
@@ -49,7 +48,7 @@ function AuthPage() {
     if (!email.success || !password.success) return toast.error("Enter a valid email and password (min 6 chars).");
     if (!fullName) return toast.error("Please enter your name.");
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data: signUpData, error } = await supabase.auth.signUp({
       email: email.data,
       password: password.data,
       options: {
@@ -57,18 +56,27 @@ function AuthPage() {
         data: { full_name: fullName, role },
       },
     });
+    if (error) { setLoading(false); return toast.error(error.message); }
+    // If email confirmation is disabled, session is returned immediately
+    if (signUpData.session) {
+      setLoading(false);
+      toast.success("Account created! Welcome to HopeBridge.");
+      navigate({ to: "/dashboard" });
+      return;
+    }
     setLoading(false);
-    if (error) return toast.error(error.message);
-    toast.success("Account created! Check your email to confirm.");
+    toast.success("Account created! Please sign in.");
     setTab("signin");
   }
 
   async function handleGoogle() {
     setLoading(true);
-    const result = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin + "/dashboard" });
-    if (result.error) { setLoading(false); toast.error("Google sign-in failed"); return; }
-    if (result.redirected) return;
-    navigate({ to: "/dashboard" });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: window.location.origin + "/dashboard" },
+    });
+    if (error) { setLoading(false); toast.error("Google sign-in failed: " + error.message); return; }
+    // browser will redirect to Google — no further action needed
   }
 
   return (

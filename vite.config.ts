@@ -12,4 +12,12 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      watch: {
+        // Prevent Vite from reloading when the generated routeTree file is rewritten by the codegen
+        ignored: ["**/src/routeTree.gen.ts"],
+      },
+    },
+  },
 });
